@@ -12,7 +12,6 @@ fn find_pair(inputs: &Vec<i32>, sum: i32) -> Option<(i32, i32)> {
     None
 }
 
-
 fn find_trio(inputs: &Vec<i32>, sum: i32) -> Option<(i32, i32, i32)> {
     for i in 0..inputs.len()-2 {
         for j in i+1..inputs.len()-1 {
@@ -32,20 +31,12 @@ fn main() {
 
     let inputs: Vec<i32> = contents.split_ascii_whitespace().map(|v| v.parse::<i32>().unwrap()).collect();
     let pair = find_pair(&inputs, 2020);
-    match pair {
-        Some((x, y)) => {
-            println!("{}", x * y);
-        },
-        _ => {}
-    };
+    let (x, y) = pair.unwrap();
+    println!("{}", x * y);
 
     let trio = find_trio(&inputs, 2020);
-    match trio {
-        Some((x, y, z)) => {
-            println!("{}", x * y * z);
-        },
-        _ => {}
-    };
+    let (x, y, z) = trio.unwrap();
+    println!("{}", x * y * z);
 }
 
 #[cfg(test)]

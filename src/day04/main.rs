@@ -1,5 +1,5 @@
 use std::fs;
-use std::collections::{HashMap};
+use std::collections::{HashMap, HashSet};
 
 #[macro_use] extern crate maplit;
 
@@ -18,22 +18,17 @@ struct Passport {
 
 impl Passport {
     fn from_string(input: &str) -> Option<Passport> {
+        let required_keys = hashset! {"byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"};
+
         let elements: HashMap<&str, &str> = input
             .split_ascii_whitespace()
-            .map(|element| element.split(":"))
             .map(|element| {
-                let v: Vec<&str> = element.collect();
+                let v: Vec<&str> = element.split(":").collect();
                 (v[0], v[1])
             })
             .collect();
-        if elements.contains_key("byr") &&
-            elements.contains_key("iyr") &&
-            elements.contains_key("eyr") &&
-            elements.contains_key("hgt") &&
-            elements.contains_key("hcl") &&
-            elements.contains_key("ecl") &&
-            elements.contains_key("pid") {
-
+        let keys: HashSet<&str> = elements.keys().into_iter().map(|key| *key).collect();
+        if keys.intersection(&required_keys).count() == required_keys.len() {
             let mut passport = Passport {
                 byr: elements["byr"].to_string(),
                 iyr: elements["iyr"].to_string(),
@@ -91,7 +86,7 @@ impl Passport {
         }
 
         fn is_valid_ecl(ecl: &str) -> bool {
-            let colors = hashset!{ "amb", "blu", "brn", "gry", "grn", "hzl", "oth" };
+            let colors: HashSet<&str> = hashset!{ "amb", "blu", "brn", "gry", "grn", "hzl", "oth" };
             colors.contains(ecl)
         }
 
@@ -99,7 +94,8 @@ impl Passport {
             pid.len() == 9 && pid.chars().filter(is_decimal_digit).count() == 9
         }
 
-        return is_valid_byr(&self.byr) &&
+        return
+            is_valid_byr(&self.byr) &&
             is_valid_iyr(&self.iyr) &&
             is_valid_eyr(&self.eyr) &&
             is_valid_hgt(&self.hgt) &&
@@ -117,14 +113,14 @@ fn main() {
 
     let passports: Vec<Passport> = contents
         .split("\n\n")
-        .map(|input| Passport::from_string(input))
-        .filter(|passport| passport.is_some())
-        .map(|passport| passport.unwrap())
+        .filter_map(|input| Passport::from_string(input))
         .collect();
-
     println!("{}", passports.len());
 
-    let valid_passports = passports.into_iter().filter(|passport| passport.is_valid()).count();
+    let valid_passports = passports
+        .into_iter()
+        .filter(|passport| passport.is_valid())
+        .count();
     println!("{}", valid_passports);
 }
 
@@ -151,11 +147,8 @@ iyr:2011 ecl:brn hgt:59in";
     fn test_load_passport_records() {
         let passports: Vec<Passport> = INPUT
             .split("\n\n")
-            .map(|input| Passport::from_string(input))
-            .filter(|passport| passport.is_some())
-            .map(|passport| passport.unwrap())
+            .filter_map(|input| Passport::from_string(input))
             .collect();
-
         assert_eq!(passports.len(), 2);
     }
 }

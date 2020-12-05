@@ -40,14 +40,14 @@ fn main() {
     let invalid_passwords_01 = contents
         .lines()
         .map(parse_password)
-        .filter(|(policy, password)| { is_valid_01(policy, password) })
+        .filter(|(policy, password)| is_valid_01(policy, password))
         .count();
     println!("{}", invalid_passwords_01);
 
     let invalid_passwords_02 = contents
         .lines()
         .map(parse_password)
-        .filter(|(policy, password)| { is_valid_02(policy, password) })
+        .filter(|(policy, password)| is_valid_02(policy, password))
         .count();
     println!("{}", invalid_passwords_02);
 }
