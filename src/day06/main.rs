@@ -47,13 +47,7 @@ impl DeclarationGroup {
     fn yes_count_for_all_declarations(&self) -> usize {
         self.yes_answers
             .iter()
-            .map(|(_char, count)| {
-                if *count == self.declarations.len() {
-                    1
-                } else {
-                    0
-                }
-            })
+            .map(|(_char, count)| if *count == self.declarations.len() { 1 } else { 0 })
             .sum()
     }
 }
@@ -112,7 +106,7 @@ b";
             .map(|element|DeclarationGroup::create(element))
             .collect();
 
-        let yes_count = declarations
+        let yes_count: usize = declarations
             .iter()
             .map(|group| group.yes_count())
             .sum();
@@ -127,7 +121,7 @@ b";
             .map(|element|DeclarationGroup::create(element))
             .collect();
 
-        let yes_count = declarations
+        let yes_count: usize = declarations
             .iter()
             .map(|group| group.yes_count_for_all_declarations())
             .sum();

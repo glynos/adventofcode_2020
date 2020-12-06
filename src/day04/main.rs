@@ -91,7 +91,8 @@ impl Passport {
         }
 
         fn is_valid_pid(pid: &str) -> bool {
-            pid.len() == 9 && pid.chars().filter(is_decimal_digit).count() == 9
+            const PID_LENGTH: usize = 9;
+            pid.len() == PID_LENGTH && pid.chars().filter(is_decimal_digit).count() == PID_LENGTH
         }
 
         return

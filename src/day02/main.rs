@@ -4,7 +4,7 @@ use std::fs;
 struct PasswordPolicy {
     index_01: usize,
     index_02: usize,
-    char: u8,
+    char: char,
 }
 
 
@@ -14,12 +14,12 @@ fn parse_password(line: &str) -> (PasswordPolicy, String) {
     let indices = policy[0].split('-').collect::<Vec<&str>>();
     let index_01 = indices[0].parse::<usize>().unwrap();
     let index_02 = indices[1].parse::<usize>().unwrap();
-    (PasswordPolicy{ index_01, index_02, char: policy[1].as_bytes()[0] }, elements[1].trim().to_string())
+    (PasswordPolicy{ index_01, index_02, char: policy[1].chars().next().unwrap() }, elements[1].trim().to_string())
 }
 
 
 fn is_valid_01(policy: &PasswordPolicy, password: &String) -> bool {
-    let char_count = password.bytes()
+    let char_count = password.chars()
         .filter(|char| policy.char == *char)
         .count()
     ;
@@ -28,7 +28,7 @@ fn is_valid_01(policy: &PasswordPolicy, password: &String) -> bool {
 
 
 fn is_valid_02(policy: &PasswordPolicy, password: &String) -> bool {
-    let ascii = password.as_bytes();
+    let ascii: Vec<char> = password.chars().collect();
     (ascii[policy.index_01 - 1] == policy.char) ^ (ascii[policy.index_02 - 1] == policy.char)
 }
 
