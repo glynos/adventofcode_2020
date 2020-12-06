@@ -21,7 +21,7 @@ impl Passport {
         let required_keys = hashset! {"byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"};
 
         let elements: HashMap<&str, &str> = input
-            .split_ascii_whitespace()
+            .split_whitespace()
             .map(|element| {
                 let v: Vec<&str> = element.split(":").collect();
                 (v[0], v[1])

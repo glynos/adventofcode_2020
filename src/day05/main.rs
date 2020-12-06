@@ -61,6 +61,7 @@ fn main() {
     for seat in &seats {
         rows[seat.row].push(seat);
     }
+    let rows = rows;
 
     let my_row = (&rows)
         .iter()
@@ -72,7 +73,7 @@ fn main() {
 
     let seat_numbers: HashSet<usize> = hashset!(0, 1, 2, 3, 4, 5, 6, 7);
     let seats_in_my_row: HashSet<usize> = my_row.iter().map(|seat| seat.column).collect();
-    for seat_number in seat_numbers.symmetric_difference(&seats_in_my_row) {
+    for seat_number in seat_numbers.difference(&seats_in_my_row) {
         let seat = Seat { row: my_row[0].row, column: *seat_number };
         println!("{}", seat.id());
     }
