@@ -1,6 +1,5 @@
 use std::ops::Index;
 use std::fs;
-use reduce::Reduce;
 
 struct Row {
     values: Vec<u8>,
@@ -73,11 +72,12 @@ fn main() {
         (1 as usize, 7 as usize),
         (2 as usize, 1 as usize),
     );
-    let tree_count_product = steps
+    let tree_count_product: usize = steps
         .into_iter()
         .map(|step| map.count_trees(step))
-        .reduce(|x, y| x * y);
-    println!("{}", tree_count_product.unwrap());
+        .product()
+    ;
+    println!("{}", tree_count_product);
 }
 
 

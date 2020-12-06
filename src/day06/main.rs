@@ -1,6 +1,5 @@
 use std::fs;
 use std::collections::HashMap;
-use reduce::Reduce;
 
 
 struct Declaration {
@@ -55,8 +54,7 @@ impl DeclarationGroup {
                     0
                 }
             })
-            .reduce(|lhs, rhs| lhs + rhs)
-            .unwrap()
+            .sum()
     }
 }
 
@@ -70,19 +68,18 @@ fn main() {
         .map(|element|DeclarationGroup::create(element))
         .collect();
 
-    let yes_count = declarations
+    let yes_count: usize = declarations
         .iter()
         .map(|group| group.yes_count())
-        .reduce(|lhs, rhs| lhs + rhs)
-        .unwrap();
+        .sum()
+        ;
 
     println!("{}", yes_count);
 
-    let yes_count_for_all_declarations = declarations
+    let yes_count_for_all_declarations: usize = declarations
         .iter()
         .map(|group| group.yes_count_for_all_declarations())
-        .reduce(|lhs, rhs| lhs + rhs)
-        .unwrap();
+        .sum();
 
     println!("{}", yes_count_for_all_declarations);
 }
@@ -118,8 +115,7 @@ b";
         let yes_count = declarations
             .iter()
             .map(|group| group.yes_count())
-            .reduce(|lhs, rhs| lhs + rhs)
-            .unwrap();
+            .sum();
 
         assert_eq!(yes_count, 11);
     }
@@ -134,8 +130,7 @@ b";
         let yes_count = declarations
             .iter()
             .map(|group| group.yes_count_for_all_declarations())
-            .reduce(|lhs, rhs| lhs + rhs)
-            .unwrap();
+            .sum();
 
         assert_eq!(yes_count, 6);
     }
